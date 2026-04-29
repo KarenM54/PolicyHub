@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abilities Policies & Procedures Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0F6E56;--gl:#E1F5EE;--gt:#085041;
+  --blue:#185FA5;--bl:#E6F1FB;--bt:#0C447C;
+  --red:#A32D2D;--rl:#FCEBEB;--rt:#791F1F;
+  --amber:#BA7517;--al:#FAEEDA;--at:#633806;
+  --purple:#534AB7;--pl:#EEEDFE;--pt:#3C3489;
+  --ink:#1A1A18;--ink2:#5A5A56;--ink3:#9A9A94;
+  --bg:#F5F3EE;--sur:#FFFFFF;--sur2:#EFEDE8;
+  --bdr:rgba(0,0,0,0.09);--bdr2:rgba(0,0,0,0.16);
+  --r:10px;--rs:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;min-height:100vh}
+
+/* Topbar */
+.topbar{background:var(--ink);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:100}
+.tlogo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.tmark{width:28px;height:28px;background:var(--green);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.tmark svg{width:14px;height:14px}
+.tname{font-size:13px;font-weight:500;color:#fff}
+.tnav{display:flex;gap:2px}
+.tnav-item{font-size:12px;color:rgba(255,255,255,0.6);padding:6px 12px;border-radius:6px;cursor:pointer;transition:all 0.15s;border:none;background:none;font-family:'DM Sans',sans-serif}
+.tnav-item:hover,.tnav-item.active{color:#fff;background:rgba(255,255,255,0.12)}
+.tnav-pill{font-size:11px;padding:5px 12px;border-radius:8px;background:var(--green);color:#fff;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif}
+
+/* Pages */
+.page{display:none}
+.page.active{display:block}
+
+/* ═══════════ HOME PAGE ═══════════ */
+.hero{background:var(--ink);padding:44px 28px 48px}
+.hero-inner{max-width:1020px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:center}
+.hero-eye{font-size:11px;color:var(--green);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;font-weight:500}
+.hero-h{font-size:38px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:14px}
+.hero-h em{font-style:italic;color:var(--green)}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:24px}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.hbtn{padding:10px 20px;border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.hbtn-p{background:var(--green);color:#fff}
+.hbtn-p:hover{opacity:0.9}
+.hbtn-g{background:rgba(255,255,255,0.1);color:#fff;border:0.5px solid rgba(255,255,255,0.2)}
+.hbtn-g:hover{background:rgba(255,255,255,0.18)}
+.hero-card{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.12);border-radius:var(--r);padding:18px}
+.hc-label{font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;font-weight:500}
+.hc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.hc-stat{text-align:center;padding:10px 6px;border-right:0.5px solid rgba(255,255,255,0.1)}
+.hc-stat:last-child{border-right:none}
+.hc-val{font-size:30px;font-weight:300;color:#fff}
+.hc-slabel{font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px}
+.hc-updates{margin-top:14px}
+.hc-update{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid rgba(255,255,255,0.08);font-size:12px;color:rgba(255,255,255,0.55)}
+.hc-update:last-child{border-bottom:none}
+.updot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.uptag{margin-left:auto;font-size:10px;padding:2px 7px;border-radius:5px}
+
+.main-wrap{max-width:1020px;margin:0 auto;padding:28px 28px;display:grid;grid-template-columns:1fr 280px;gap:22px}
+.content-col{display:flex;flex-direction:column;gap:22px}
+.sidebar-col{display:flex;flex-direction:column;gap:14px}
+.section-lbl{font-size:10px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px}
+
+/* Area cards */
+.area-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.area-card{background:var(--sur);border:0.5px solid var(--bdr2);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;gap:8px}
+.area-card:hover{border-color:var(--green);background:#F0FAF6}
+.ac-top{display:flex;align-items:flex-start;justify-content:space-between}
+.ac-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ac-count{font-size:10px;color:var(--ink3);background:var(--sur2);padding:2px 7px;border-radius:5px}
+.ac-name{font-size:13px;font-weight:500}
+.ac-desc{font-size:11px;color:var(--ink2);line-height:1.5}
+.ac-bar{height:3px;background:var(--sur2);border-radius:2px;overflow:hidden}
+.ac-fill{height:100%;border-radius:2px}
+.ac-footer{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--ink2)}
+
+/* Card */
+.card{background:var(--sur);border:0.5px solid var(--bdr2);border-radius:var(--r);overflow:hidden}
+.card-head{padding:12px 16px;border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:13px;font-weight:500}
+.card-body{padding:14px 16px}
+.card-link{font-size:12px;color:var(--green);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
+
+/* Update rows */
+.upd-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--bdr)}
+.upd-row:last-child{border-bottom:none}
+.upd-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.upd-title{font-size:13px;font-weight:500;margin-bottom:2px}
+.upd-meta{font-size:11px;color:var(--ink3)}
+
+/* Sidebar quick links */
+.ql{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rs);cursor:pointer;transition:all 0.12s}
+.ql:hover{background:var(--sur2)}
+.ql-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ql-text{font-size:13px;flex:1}
+.ql-sub{font-size:11px;color:var(--ink3)}
+.ql-arr{color:var(--ink3);font-size:14px;margin-left:auto}
+
+/* Contacts */
+.contact-item{margin-bottom:10px}
+.contact-label{font-size:11px;font-weight:500;margin-bottom:2px}
+.contact-val{font-size:12px;color:var(--ink2)}
+.contact-tel{font-size:13px;color:var(--green);font-weight:500}
+
+/* Pill */
+.pill{display:inline-flex;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:500}
+.pill-green{background:var(--gl);color:var(--gt)}
+.pill-amber{background:var(--al);color:var(--at)}
+.pill-red{background:var(--rl);color:var(--rt)}
+.pill-gray{background:var(--sur2);color:var(--ink2)}
+
+/* ═══════════ LIBRARY PAGE ═══════════ */
+.lib-header{background:var(--ink);padding:28px 28px 32px}
+.lib-inner{max-width:1020px;margin:0 auto}
+.lib-title{font-size:28px;font-weight:300;color:#fff;margin-bottom:6px}
+.lib-sub{font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:18px}
+.lib-search{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.15);border-radius:var(--rs);padding:8px 14px;max-width:480px}
+.lib-search input{background:none;border:none;outline:none;color:#fff;font-size:13px;font-family:'DM Sans',sans-serif;flex:1}
+.lib-search input::placeholder{color:rgba(255,255,255,0.35)}
+.sticky-nav{background:var(--sur);border-bottom:0.5px solid var(--bdr2);padding:10px 28px;display:flex;gap:6px;flex-wrap:wrap;position:sticky;top:52px;z-index:50}
+.snav-btn{font-size:11px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--bdr2);background:var(--bg);color:var(--ink2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s}
+.snav-btn:hover,.snav-btn.on{background:var(--green);color:#fff;border-color:var(--green)}
+.lib-container{max-width:1020px;margin:0 auto;padding:24px 28px}
+.area-section{margin-bottom:30px;scroll-margin-top:100px}
+.area-hdr{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:10px;border-bottom:0.5px solid var(--bdr2)}
+.area-icon-lg{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.area-hdr-title{font-size:16px;font-weight:500}
+.area-hdr-meta{font-size:11px;color:var(--ink3);margin-top:1px}
+.policy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.policy-card{background:var(--sur);border:0.5px solid var(--bdr2);border-radius:var(--rs);padding:13px 15px;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;gap:7px}
+.policy-card:hover{border-color:var(--green);background:#F0FAF6}
+.pc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.pc-name{font-size:12px;font-weight:500;line-height:1.4;flex:1}
+.pc-ver{font-size:9px;color:var(--ink3);background:var(--sur2);padding:2px 5px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+.pc-desc{font-size:11px;color:var(--ink2);line-height:1.5}
+.pc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:5px;border-top:0.5px solid var(--bdr);font-size:10px}
+.pc-action{color:var(--green);font-weight:500}
+.pc-date{color:var(--ink3)}
+.no-results{text-align:center;padding:40px;color:var(--ink3);font-size:13px}
+
+/* ═══════════ CONFIRMATION PAGE ═══════════ */
+.conf-container{max-width:660px;margin:0 auto;padding:24px 16px}
+.step-wrap{display:flex;align-items:center;margin-bottom:24px}
+.step-item-c{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.step-circle{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;border:1.5px solid var(--bdr2);color:var(--ink3);background:var(--sur);transition:all 0.2s}
+.step-circle.active{background:var(--green);border-color:var(--green);color:#fff}
+.step-circle.done{background:var(--gl);border-color:var(--green);color:var(--gt)}
+.step-lbl{font-size:10px;color:var(--ink3);white-space:nowrap}
+.step-lbl.active{color:var(--green);font-weight:500}
+.step-line{flex:1;height:1.5px;background:var(--bdr2);margin-bottom:18px;transition:background 0.3s}
+.step-line.done{background:var(--green)}
+.conf-card{background:var(--sur);border:0.5px solid var(--bdr2);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.conf-card-head{padding:13px 16px;border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.conf-card-title{font-size:13px;font-weight:500}
+.conf-card-body{padding:14px 16px}
+.form-row{margin-bottom:13px}
+.form-lbl{font-size:11px;font-weight:500;color:var(--ink2);margin-bottom:5px;display:block}
+.form-input{width:100%;border:0.5px solid var(--bdr2);border-radius:var(--rs);padding:8px 11px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--sur2);color:var(--ink);outline:none;transition:border-color 0.15s}
+.form-input:focus{border-color:var(--green);background:var(--sur)}
+.dec-row{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border-radius:var(--rs);margin-bottom:5px;cursor:pointer;transition:background 0.12s}
+.dec-row:hover{background:var(--sur2)}
+.dec-row input{margin-top:2px;accent-color:var(--green);width:14px;height:14px;flex-shrink:0}
+.dec-row span{font-size:12px;color:var(--ink);line-height:1.5}
+.quiz-block{background:var(--sur2);border-radius:var(--rs);padding:12px;margin-bottom:9px}
+.quiz-q{font-size:12px;font-weight:500;margin-bottom:9px;line-height:1.5}
+.qopt{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border:0.5px solid var(--bdr2);border-radius:var(--rs);cursor:pointer;margin-bottom:5px;transition:all 0.12s;background:var(--sur)}
+.qopt:hover{background:var(--sur2)}
+.qopt.sel{border-color:var(--green);background:var(--gl)}
+.qopt input{margin-top:2px;accent-color:var(--green);flex-shrink:0}
+.qopt span{font-size:12px;color:var(--ink);line-height:1.5}
+.qopt.sel span{color:var(--gt)}
+.btn-row-c{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px}
+.cbtn{padding:8px 16px;border-radius:var(--rs);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;border:0.5px solid var(--bdr2);background:var(--sur);color:var(--ink);transition:all 0.15s}
+.cbtn:hover{background:var(--sur2)}
+.cbtn:disabled{opacity:0.4;cursor:not-allowed}
+.cbtn-green{background:var(--green);color:var(--gl);border-color:var(--green)}
+.cbtn-green:hover{opacity:0.9}
+.conf-banner{border-radius:var(--rs);padding:12px 14px;margin-bottom:10px}
+.cb-green{background:var(--gl);border:0.5px solid var(--green)}
+.cb-red{background:var(--rl);border:0.5px solid #F09595}
+.cb-amber{background:var(--al);border:0.5px solid #EF9F27}
+.cb-title{font-size:12px;font-weight:500;margin-bottom:3px}
+.cb-body{font-size:11px;line-height:1.6}
+.rec-box{background:var(--sur2);border-radius:var(--rs);padding:10px 12px;margin-top:10px;font-size:11px;color:var(--ink2);line-height:1.8}
+.spinner-c{width:16px;height:16px;border:2px solid var(--gl);border-top-color:var(--green);border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══════════ DASHBOARD PAGE ═══════════ */
+.dash-container{max-width:1020px;margin:0 auto;padding:24px 28px}
+.dash-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.dash-title{font-size:16px;font-weight:500}
+.dash-actions{display:flex;gap:8px}
+.dbtn{padding:6px 12px;border-radius:var(--rs);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:0.5px solid var(--bdr2);background:var(--sur);color:var(--ink);transition:all 0.15s}
+.dbtn:hover{background:var(--sur2)}
+.dbtn-green{background:var(--green);color:var(--gl);border-color:var(--green)}
+.dbtn-green:hover{opacity:0.9}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat-card{background:var(--sur);border:0.5px solid var(--bdr);border-radius:var(--r);padding:12px 14px}
+.stat-val{font-size:26px;font-weight:300}
+.stat-lbl{font-size:10px;color:var(--ink3);margin-top:2px}
+.stat-sub{font-size:10px;color:var(--ink2);margin-top:3px}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.prog-wrap{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.prog-bar{flex:1;height:4px;background:var(--sur2);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;transition:width 0.5s}
+.prog-num{font-size:10px;font-weight:500;min-width:26px;text-align:right;font-family:'DM Sans',sans-serif}
+.log-table{width:100%;border-collapse:collapse;font-size:11px}
+.log-table th{text-align:left;padding:6px 8px;color:var(--ink3);font-weight:500;font-size:10px;border-bottom:0.5px solid var(--bdr2)}
+.log-table td{padding:8px 8px;border-bottom:0.5px solid var(--bdr);color:var(--ink);vertical-align:middle}
+.log-table tr:hover td{background:var(--sur2)}
+.avatar-sm{width:24px;height:24px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:500;color:var(--gt);flex-shrink:0}
+.sp-status{display:flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:8px}
+.sp-dot{width:7px;height:7px;border-radius:50%}
+
+/* ═══════════ ALERTS ═══════════ */
+.alert-bar{background:var(--al);border-bottom:0.5px solid #EF9F27;padding:9px 28px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--at)}
+.alert-bar button{background:none;border:none;cursor:pointer;color:var(--at);font-size:18px;line-height:1;padding:0 4px;margin-left:auto}
+.alert-bar-btn{background:var(--amber);color:#fff;border:none;border-radius:5px;padding:4px 10px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;margin-left:8px}
+
+@media(max-width:700px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-card{display:none}
+  .main-wrap{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .dash-grid{grid-template-columns:1fr}
+  .area-grid{grid-template-columns:1fr}
+  .tnav{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tlogo" onclick="showPage('home')">
+    <div class="tmark"><svg viewBox="0 0 14 14" fill="none"><path d="M1.5 3.5h11M1.5 7h7M1.5 10.5h9" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+    <span class="tname">Abilities Policies &amp; Procedures Hub</span>
+  </div>
+  <div class="tnav">
+    <button class="tnav-item active" id="nav-home" onclick="showPage('home')">Home</button>
+    <button class="tnav-item" id="nav-library" onclick="showPage('library')">Policy library</button>
+    <button class="tnav-item" id="nav-confirm" onclick="showPage('confirm')">Confirm reading</button>
+    <button class="tnav-item" id="nav-dashboard" onclick="showPage('dashboard')">Manager</button>
+  </div>
+  <button class="tnav-pill" onclick="showPage('confirm')">Confirm a policy</button>
+</div>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div class="page active" id="page-home">
+  <div id="alertBar" class="alert-bar">
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#BA7517" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.3" stroke="#BA7517" stroke-width="1.2" stroke-linecap="round"/></svg>
+    <strong>2 policies updated</strong>&nbsp;— Medication Administration v3.1 and Safeguarding Adults v2.4 need your confirmation by Friday 18 April.
+    <button class="alert-bar-btn" onclick="showPage('confirm')">Confirm now</button>
+    <button onclick="document.getElementById('alertBar').style.display='none'">×</button>
+  </div>
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eye">Abilities Development Ltd</div>
+        <h1 class="hero-h">Policies that work<br>for <em>people,</em><br>not paperwork.</h1>
+        <p class="hero-sub">Plain-English policies and procedures for every member of the Abilities Development team. Find what you need, confirm you have read it, and know exactly what to do.</p>
+        <div class="hero-btns">
+          <button class="hbtn hbtn-p" onclick="showPage('library')">Browse all policies</button>
+          <button class="hbtn hbtn-g" onclick="showPage('confirm')">Confirm a policy</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Organisation overview</div>
+        <div class="hc-stats">
+          <div class="hc-stat"><div class="hc-val">34</div><div class="hc-slabel">Policies</div></div>
+          <div class="hc-stat"><div class="hc-val">91%</div><div class="hc-slabel">Read rate</div></div>
+          <div class="hc-stat"><div class="hc-val">2</div><div class="hc-slabel">Need action</div></div>
+        </div>
+        <div class="hc-updates">
+          <div class="hc-label" style="margin-top:12px">Recent updates</div>
+          <div class="hc-update"><div class="updot" style="background:#1D9E75"></div>Medication Administration v3.1<span class="uptag" style="background:#D8F0E8;color:#085041">Today</span></div>
+          <div class="hc-update"><div class="updot" style="background:#1D9E75"></div>Safeguarding Adults v2.4<span class="uptag" style="background:#D8F0E8;color:#085041">Today</span></div>
+          <div class="hc-update"><div class="updot" style="background:#8A8880"></div>Mental Capacity Act v1.8<span class="uptag" style="background:#EDEAE3;color:#5A5A56">14 Apr</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-wrap">
+    <div class="content-col">
+      <div>
+        <div class="section-lbl">Policy areas</div>
+        <div class="area-grid" id="homeAreaGrid"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Recent policy updates</span><button class="card-link" onclick="showPage('library')">View all</button></div>
+        <div class="card-body">
+          <div class="upd-row"><div class="upd-dot" style="background:#EF9F27"></div><div><div class="upd-title">Medication Administration v3.1 <span class="pill pill-amber">Needs confirmation</span></div><div class="upd-meta">Today · CQC Regulation 12 · Deadline: 18 Apr</div></div></div>
+          <div class="upd-row"><div class="upd-dot" style="background:#EF9F27"></div><div><div class="upd-title">Safeguarding Adults v2.4 <span class="pill pill-amber">Needs confirmation</span></div><div class="upd-meta">Today · Care Act 2014 · Deadline: 18 Apr</div></div></div>
+          <div class="upd-row"><div class="upd-dot" style="background:#1D9E75"></div><div><div class="upd-title">Mental Capacity Act v1.8 <span class="pill pill-green">Confirmed</span></div><div class="upd-meta">14 Apr · Liberty Protection Safeguards guidance</div></div></div>
+          <div class="upd-row"><div class="upd-dot" style="background:#9A9A94"></div><div><div class="upd-title">Data Protection &amp; GDPR v3.0</div><div class="upd-meta">1 Mar · ICO guidance update</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-col">
+      <div class="card">
+        <div class="card-head"><span class="card-title">Quick actions</span></div>
+        <div class="card-body" style="padding:8px">
+          <div class="ql" onclick="showPage('confirm')"><div class="ql-icon" style="background:var(--gl)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3 3 6-6" stroke="#085041" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="ql-text">Confirm a policy</div><div class="ql-sub">Log your read confirmation</div></div><span class="ql-arr">›</span></div>
+          <div class="ql" onclick="showPage('library')"><div class="ql-icon" style="background:var(--bl)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="2" width="9" height="9" rx="1.5" stroke="#0C447C" stroke-width="1.2"/><path d="M4 5h5M4 7h3" stroke="#0C447C" stroke-width="1.2" stroke-linecap="round"/></svg></div><div><div class="ql-text">Browse policies</div><div class="ql-sub">All 34 policies</div></div><span class="ql-arr">›</span></div>
+          <div class="ql" onclick="showPage('dashboard')"><div class="ql-icon" style="background:var(--sur2)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="4.5" height="4.5" rx="1" stroke="#5A5A56" stroke-width="1.2"/><rect x="7.5" y="1" width="4.5" height="4.5" rx="1" stroke="#5A5A56" stroke-width="1.2"/><rect x="1" y="7.5" width="4.5" height="4.5" rx="1" stroke="#5A5A56" stroke-width="1.2"/><rect x="7.5" y="7.5" width="4.5" height="4.5" rx="1" stroke="#5A5A56" stroke-width="1.2"/></svg></div><div><div class="ql-text">Manager dashboard</div><div class="ql-sub">Compliance overview</div></div><span class="ql-arr">›</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Key contacts</span></div>
+        <div class="card-body" style="font-size:12px">
+          <div class="contact-item"><div class="contact-label">Safeguarding lead</div><div class="contact-val">Registered Manager</div><div class="contact-tel">02034112330</div></div>
+          <div class="contact-item"><div class="contact-label">MCA lead</div><div class="contact-val">Janine Davis</div></div>
+          <div class="contact-item"><div class="contact-label">Brent Safeguarding</div><div class="contact-tel">02089374300</div></div>
+          <div style="padding-top:10px;border-top:0.5px solid var(--bdr)"><div class="contact-label" style="color:var(--red)">Emergency</div><div style="font-size:18px;font-weight:500;color:var(--red)">999</div><div class="contact-val">NHS non-emergency: 111</div><div class="contact-val">CQC: 03000 616161</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ LIBRARY ═══════════ -->
+<div class="page" id="page-library">
+  <div class="lib-header">
+    <div class="lib-inner">
+      <h1 class="lib-title">Policy library</h1>
+      <p class="lib-sub">34 plain-English policies organised by area. Click any policy to confirm reading.</p>
+      <div class="lib-search">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/><path d="M9 9l2.5 2.5" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <input type="text" id="libSearch" placeholder="Search policies..." oninput="filterLib(this.value)">
+      </div>
+    </div>
+  </div>
+  <div class="sticky-nav">
+    <button class="snav-btn on" onclick="scrollArea('all',this)">All areas</button>
+    <button class="snav-btn" onclick="scrollArea('safeguarding',this)">Safeguarding</button>
+    <button class="snav-btn" onclick="scrollArea('medication',this)">Medication</button>
+    <button class="snav-btn" onclick="scrollArea('mca',this)">MCA &amp; DoLS</button>
+    <button class="snav-btn" onclick="scrollArea('hr',this)">HR &amp; staffing</button>
+    <button class="snav-btn" onclick="scrollArea('health',this)">Health &amp; safety</button>
+    <button class="snav-btn" onclick="scrollArea('governance',this)">Governance</button>
+  </div>
+  <div class="lib-container" id="libContainer"></div>
+</div>
+
+<!-- ═══════════ CONFIRMATION ═══════════ -->
+<div class="page" id="page-confirm">
+  <div class="conf-container">
+    <div class="step-wrap" id="confSteps"></div>
+    <div id="confContent"></div>
+  </div>
+</div>
+
+<!-- ═══════════ DASHBOARD ═══════════ -->
+<div class="page" id="page-dashboard">
+  <div class="dash-container">
+    <div class="dash-head">
+      <div>
+        <div class="dash-title">Compliance tracker</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:2px" id="dashRefresh">Loading...</div>
+      </div>
+      <div class="dash-actions">
+        <div class="sp-status" id="spStatus" style="background:var(--sur2)">
+          <div class="sp-dot" id="spDot" style="background:var(--ink3)"></div>
+          <span id="spLabel" style="font-size:11px;color:var(--ink2)">Connecting...</span>
+        </div>
+        <button class="dbtn" onclick="loadDashboard()">Refresh</button>
+        <button class="dbtn dbtn-green" onclick="exportCSV()">Export CSV</button>
+      </div>
+    </div>
+    <div class="stat-grid" id="dashStats"></div>
+    <div class="dash-grid">
+      <div class="card">
+        <div class="card-head"><span class="card-title">Compliance by policy</span></div>
+        <div class="card-body" id="policyBreakdown"><div style="text-align:center;padding:20px;color:var(--ink3);font-size:12px">Loading from SharePoint...</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Needs review</span><span class="pill pill-red" id="reviewCount">—</span></div>
+        <div class="card-body" id="reviewList"><div style="text-align:center;padding:20px;color:var(--ink3);font-size:12px">Loading...</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-title">Confirmation log</span><span class="pill pill-gray" id="logCount">—</span></div>
+      <div style="overflow-x:auto">
+        <table class="log-table">
+          <thead><tr><th>Staff member</th><th>Role</th><th>Policy</th><th>Date</th><th>Score</th><th>Result</th></tr></thead>
+          <tbody id="logTable"><tr><td colspan="6" style="text-align:center;padding:20px;color:var(--ink3)">Loading from SharePoint...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SP_URL = "https://abilitiesdevelopment.sharepoint.com/sites/AbilitiesPolicies";
+const LIST = "PolicyConfirmations";
+
+const AREAS = [
+  {id:'safeguarding',name:'Safeguarding',desc:'Adults at risk, abuse types, reporting, pressure ulcers',color:'#FAEAEA',icon:'#8B2A2A',count:7,rate:88,status:'updated',
+   policies:[
+    {name:'Safeguarding Adults',ver:'v2.4',status:'updated',updated:'Today',desc:'Abuse types, reporting, six principles, five Rs'},
+    {name:'Safeguarding Children in Adult Settings',ver:'v1.3',status:'current',updated:'10 Apr',desc:'Concerns about children during community visits'},
+    {name:'Whistleblowing',ver:'v1.6',status:'current',updated:'15 Feb',desc:'Raising concerns about colleagues or the organisation'},
+    {name:'Prevent & radicalisation',ver:'v1.2',status:'current',updated:'1 Feb',desc:'Spotting radicalisation signs and how to refer'},
+    {name:'Pressure ulcer prevention',ver:'v2.1',status:'current',updated:'20 Jan',desc:'Prevention, grading, reporting, body maps'},
+    {name:'Domestic abuse',ver:'v1.1',status:'current',updated:'10 Jan',desc:'Identifying domestic abuse, safe enquiry, referrals'},
+    {name:'Modern slavery',ver:'v1.0',status:'current',updated:'5 Jan',desc:'Trafficking, cuckooing, forced labour'},
+  ]},
+  {id:'medication',name:'Medication',desc:'MAR charts, 5 Rights, controlled drugs, errors, storage',color:'#E3EEF9',icon:'#14498A',count:5,rate:91,status:'updated',
+   policies:[
+    {name:'Medication Administration',ver:'v3.1',status:'updated',updated:'Today',desc:'5 Rights, MAR, controlled drugs, errors, refusals, storage'},
+    {name:'Controlled drugs procedure',ver:'v2.0',status:'current',updated:'1 Mar',desc:'CD register, running balance, handover checks'},
+    {name:'Covert medication',ver:'v1.2',status:'current',updated:'15 Jan',desc:'Best interests decisions and lawful covert administration'},
+    {name:'Medication errors',ver:'v1.5',status:'current',updated:'10 Jan',desc:'What to do, incident reporting, duty of candour'},
+    {name:'Homely remedies',ver:'v1.0',status:'current',updated:'5 Dec',desc:'Non-prescription medicines — when and how'},
+  ]},
+  {id:'mca',name:'Mental Capacity & DoLS',desc:'MCA principles, best interests, DoLS, consent',color:'#EDF8F3',icon:'#0B5C47',count:4,rate:100,status:'current',
+   policies:[
+    {name:'Mental Capacity Act',ver:'v1.8',status:'current',updated:'14 Apr',desc:'Five principles, capacity assessment, best interests'},
+    {name:'Deprivation of Liberty (DoLS/LPS)',ver:'v2.0',status:'current',updated:'1 Apr',desc:'When DoLS applies, community DoLS, LPS update'},
+    {name:'Lasting Power of Attorney',ver:'v1.1',status:'current',updated:'15 Feb',desc:'Types of LPA, attorney authority and limits'},
+    {name:'Advance decisions',ver:'v1.0',status:'current',updated:'1 Feb',desc:'What an ADRT is, when it must be followed'},
+  ]},
+  {id:'hr',name:'HR & staffing',desc:'Recruitment, DBS, supervision, conduct, equality',color:'#F3EFF9',icon:'#5B3FAB',count:6,rate:95,status:'current',
+   policies:[
+    {name:'Recruitment & DBS',ver:'v2.1',status:'current',updated:'15 Mar',desc:'Safe recruitment, DBS checks, references, right to work'},
+    {name:'Induction',ver:'v1.4',status:'current',updated:'1 Mar',desc:'What must be covered in the first 6 weeks'},
+    {name:'Supervision & appraisal',ver:'v2.0',status:'current',updated:'15 Feb',desc:'Frequency, format, records, competency assessment'},
+    {name:'Disciplinary & grievance',ver:'v1.3',status:'current',updated:'10 Feb',desc:'Formal process, suspension, investigation, appeals'},
+    {name:'Lone working',ver:'v1.5',status:'current',updated:'2 Apr',desc:'Risk assessment, check-in, personal safety'},
+    {name:'Equality & diversity',ver:'v1.2',status:'current',updated:'1 Jan',desc:'Protected characteristics, adjustments, inclusion'},
+  ]},
+  {id:'health',name:'Health & safety',desc:'Lone working, infection control, moving & handling',color:'#FFF4E3',icon:'#92580A',count:5,rate:82,status:'current',
+   policies:[
+    {name:'Infection Prevention & Control',ver:'v2.2',status:'current',updated:'28 Mar',desc:'Hand hygiene, PPE, isolation, outbreak management'},
+    {name:'Moving & Handling',ver:'v2.3',status:'review',updated:'22 Feb',desc:'Safe techniques, equipment, risk assessment'},
+    {name:'Fire safety',ver:'v1.2',status:'current',updated:'10 Feb',desc:'Evacuation, fire risk, equipment checks'},
+    {name:'COSHH',ver:'v1.1',status:'current',updated:'1 Feb',desc:'Hazardous substances, storage and disposal'},
+    {name:'Accident & incident reporting',ver:'v1.4',status:'current',updated:'15 Jan',desc:'What to report, to whom, and by when'},
+  ]},
+  {id:'governance',name:'Governance & quality',desc:'Data protection, complaints, CQC notifications',color:'#EDEAE3',icon:'#4A4840',count:7,rate:97,status:'current',
+   policies:[
+    {name:'Data Protection & GDPR',ver:'v3.0',status:'current',updated:'1 Mar',desc:'Personal data, retention, subject access, breaches'},
+    {name:'Complaints procedure',ver:'v1.3',status:'current',updated:'20 Mar',desc:'Receive, log, investigate and respond to complaints'},
+    {name:'Duty of candour',ver:'v1.2',status:'current',updated:'15 Feb',desc:'When duty applies, what to tell people, how to apologise'},
+    {name:'CQC notifications',ver:'v1.1',status:'current',updated:'10 Feb',desc:'What must be notified to CQC and when'},
+    {name:'Quality assurance & audit',ver:'v1.3',status:'current',updated:'1 Feb',desc:'Spot checks, audits, learning from incidents'},
+    {name:'Business continuity',ver:'v1.0',status:'current',updated:'15 Jan',desc:'What to do if systems fail or staff unavailable'},
+    {name:'Records management',ver:'v1.2',status:'current',updated:'5 Jan',desc:'What records to keep, how long, safe disposal'},
+  ]},
+];
+
+const POLICIES_LIST = ['Safeguarding Adults','Medication Administration','Mental Capacity Act / DoLS','Lone Working','Infection Control','Complaints Procedure','Data Protection','Whistleblowing','Moving & Handling','Pressure Ulcer Prevention'];
+
+const QUIZ = {
+  'Safeguarding Adults':[
+    {q:'If a service user asks you to promise not to tell anyone about abuse, what do you do?',opts:['Promise secrecy so they feel safe','Explain you have a duty to report and will support them','Tell their family','Wait to see if it happens again'],cor:1},
+    {q:'What are the Five Rs of safeguarding?',opts:['Report, Record, Refer, Respond, Recognise','Review, Report, React, Record, Refer','Recognise, Respond, Report, Record, Refer','Refer, Record, Report, React, Review'],cor:2},
+    {q:'You notice unexplained bruising on a service user. What is your first action?',opts:['Ask their family what happened','Complete a body map and report to your manager immediately','Wait to see if more bruising appears','Mention it at the next team meeting'],cor:1},
+  ],
+  'Medication Administration':[
+    {q:'When must you sign the MAR chart?',opts:['Before the medication round to save time','At the end of your shift','Immediately after you have given the medication','When your manager checks it'],cor:2},
+    {q:'A service user with capacity refuses their medication. What do you do?',opts:['Crush it into food so they get it anyway','Respect refusal, record on MAR, inform your manager','Force them — it is prescribed for a reason','Wait 10 minutes and try again without reporting'],cor:1},
+    {q:'You realise you have given the wrong dose. What must you do?',opts:['Say nothing if the person seems fine','Tell your manager immediately and complete an incident report','Alter the MAR to match what you gave','Tell the service user not to worry'],cor:1},
+  ],
+  'Mental Capacity Act / DoLS':[
+    {q:'What is the first principle of the Mental Capacity Act?',opts:['Always act in the person\'s best interests','Assume a person has capacity unless proved otherwise','Use the least restrictive option','Make a formal assessment before every decision'],cor:1},
+    {q:'A person with capacity makes a decision you think is unwise. What do you do?',opts:['Overrule them for their own good','Respect their decision — adults have the right to make unwise choices','Contact their family to decide','Record it as a safeguarding concern'],cor:1},
+    {q:'Who makes day-to-day best interests decisions?',opts:['Only the GP','Only a social worker','The carer most directly involved, as recorded in the care plan','Only the Registered Manager'],cor:2},
+  ],
+  'default':[
+    {q:'Who is responsible for following Abilities Development Ltd policies?',opts:['Only the Registered Manager','Only qualified staff','All staff and volunteers','Only permanent employees'],cor:2},
+    {q:'If unsure whether a situation is a safeguarding concern, what should you do?',opts:['Do nothing — if unsure it probably is not serious','Report it — always better to raise a concern than ignore one','Ask the service user\'s family to decide','Wait and see if it gets worse'],cor:1},
+    {q:'How soon must you report a medication error to your manager?',opts:['Within 24 hours','At the next team meeting','Immediately','Only if the service user becomes unwell'],cor:2},
+  ],
+};
+
+// ── Navigation ────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.tnav-item').forEach(b => b.classList.remove('active'));
+  const nb = document.getElementById('nav-' + id);
+  if (nb) nb.classList.add('active');
+  window.scrollTo(0, 0);
+  if (id === 'library') renderLibrary();
+  if (id === 'confirm') { confStep = 0; confData = {}; confAnswers = {}; renderConf(); }
+  if (id === 'dashboard') loadDashboard();
+}
+
+// ── Home area grid ────────────────────────────────────────────
+function renderHomeAreas() {
+  const colMap = {updated:'#EF9F27', current:'#1D9E75', review:'#378ADD'};
+  document.getElementById('homeAreaGrid').innerHTML = AREAS.map(a => {
+    const col = colMap[a.status] || '#1D9E75';
+    const statusPill = a.status === 'updated' ? `<span class="pill pill-amber">Updated</span>` : '';
+    return `<div class="area-card" onclick="showPage('library');setTimeout(()=>scrollArea('${a.id}',null),100)">
+      <div class="ac-top">
+        <div class="ac-icon" style="background:${a.color}">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="${a.icon}" stroke-width="1.2"/><path d="M3.5 5h7M3.5 7.5h5" stroke="${a.icon}" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <span class="ac-count">${a.count} policies</span>
+      </div>
+      <div class="ac-name">${a.name}</div>
+      <div class="ac-desc">${a.desc}</div>
+      <div>
+        <div class="ac-footer"><span class="ac-compliance">Read rate: ${a.rate}%</span>${statusPill}</div>
+        <div class="ac-bar"><div class="ac-fill" style="width:${a.rate}%;background:${col}"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Library ───────────────────────────────────────────────────
+function renderLibrary(filter = '') {
+  const colMap = {updated:`<span class="pill pill-amber">Updated</span>`, review:`<span class="pill pill-gray">Under review</span>`, current:`<span class="pill pill-green">Current</span>`};
+  let html = '';
+  let any = false;
+  AREAS.forEach(a => {
+    const filtered = filter ? a.policies.filter(p => p.name.toLowerCase().includes(filter) || p.desc.toLowerCase().includes(filter)) : a.policies;
+    if (!filtered.length) return;
+    any = true;
+    html += `<div class="area-section" id="lib-${a.id}">
+      <div class="area-hdr">
+        <div class="area-icon-lg" style="background:${a.color}">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="${a.icon}" stroke-width="1.3"/><path d="M4 6h8M4 9h5" stroke="${a.icon}" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div><div class="area-hdr-title">${a.name}</div><div class="area-hdr-meta">${a.policies.length} policies</div></div>
+      </div>
+      <div class="policy-grid">${filtered.map(p => `
+        <div class="policy-card" onclick="showPage('confirm')">
+          <div class="pc-top"><span class="pc-name">${p.name}</span><span class="pc-ver">${p.ver}</span></div>
+          <div class="pc-desc">${p.desc}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">${colMap[p.status]}</div>
+          <div class="pc-footer"><span class="pc-action">Read &amp; confirm →</span><span class="pc-date">Updated ${p.updated}</span></div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  });
+  document.getElementById('libContainer').innerHTML = any ? html : '<div class="no-results">No policies match your search.</div>';
+}
+
+function filterLib(v) { renderLibrary(v.toLowerCase().trim()); }
+
+function scrollArea(id, btn) {
+  document.querySelectorAll('.snav-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  else document.querySelectorAll('.snav-btn')[0].classList.add('on');
+  if (id === 'all') { window.scrollTo({top: 0, behavior: 'smooth'}); return; }
+  const el = document.getElementById('lib-' + id);
+  if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
+// ── Confirmation ──────────────────────────────────────────────
+let confStep = 0, confData = {}, confAnswers = {};
+
+function getQuiz(p) { return QUIZ[p] || QUIZ['default']; }
+
+function renderConfSteps() {
+  const labels = ['Your details', 'Declaration', 'Quick check', 'Complete'];
+  document.getElementById('confSteps').innerHTML = labels.map((l, i) => {
+    const isA = i === confStep, isDone = i < confStep;
+    return (i > 0 ? `<div class="step-line${i <= confStep ? ' done' : ''}"></div>` : '') +
+      `<div class="step-item-c">
+        <div class="step-circle ${isDone?'done':isA?'active':''}">${isDone ? '&#10003;' : i+1}</div>
+        <div class="step-lbl ${isA?'active':''}">${l}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderConf() {
+  renderConfSteps();
+  const fns = [renderConf0, renderConf1, renderConf2, renderConf3];
+  document.getElementById('confContent').innerHTML = fns[confStep]();
+}
+
+function renderConf0() {
+  return `<div class="conf-card">
+    <div class="conf-card-head"><span class="conf-card-title">Your details</span></div>
+    <div class="conf-card-body">
+      <div class="form-row"><label class="form-lbl">Full name</label><input class="form-input" type="text" id="fn" placeholder="e.g. Sarah Rahman" value="${confData.name||''}"></div>
+      <div class="form-row"><label class="form-lbl">Role</label><select class="form-input" id="fr"><option value="">Select your role...</option>${['Support Worker','Senior Carer','Care Coordinator','Registered Manager','Agency Worker','Volunteer'].map(r=>`<option${confData.role===r?' selected':''}>${r}</option>`).join('')}</select></div>
+      <div class="form-row"><label class="form-lbl">Policy you are confirming</label><select class="form-input" id="fp"><option value="">Select a policy...</option>${POLICIES_LIST.map(p=>`<option${confData.policy===p?' selected':''}>${p}</option>`).join('')}</select></div>
+      <div class="btn-row-c"><div></div><button class="cbtn cbtn-green" onclick="conf0Next()">Continue</button></div>
+    </div>
+  </div>`;
+}
+
+function conf0Next() {
+  const n = document.getElementById('fn').value.trim();
+  const r = document.getElementById('fr').value;
+  const p = document.getElementById('fp').value;
+  if (!n || !r || !p) { alert('Please fill in all three fields.'); return; }
+  confData.name = n; confData.role = r; confData.policy = p;
+  confStep = 1; renderConf();
+}
+
+function renderConf1() {
+  const decls = [
+    'I have read the full ' + confData.policy + ' policy',
+    'I understand my responsibilities as set out in this policy',
+    'I know what to do in the situations this policy covers',
+    'I know how to escalate a concern if I need to',
+    'I will ask my manager if I have any questions',
+  ];
+  return `<div class="conf-card">
+    <div class="conf-card-head"><span class="conf-card-title">Declaration — ${confData.policy}</span></div>
+    <div class="conf-card-body">
+      <div class="conf-banner cb-green" style="margin-bottom:12px">
+        <div class="cb-title" style="color:var(--gt)">${confData.name} — please tick each statement</div>
+        <div class="cb-body" style="color:var(--gt)">Tick each statement honestly to confirm you have read and understood this policy.</div>
+      </div>
+      ${decls.map((d,i)=>`<label class="dec-row"><input type="checkbox" id="dc${i}" style="accent-color:var(--green);width:14px;height:14px;flex-shrink:0;margin-top:2px" ${confData['dc'+i]?'checked':''}><span>${d}</span></label>`).join('')}
+      <div class="btn-row-c">
+        <button class="cbtn" onclick="confStep=0;renderConf()">Back</button>
+        <button class="cbtn cbtn-green" onclick="conf1Next()">Continue to quick check</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function conf1Next() {
+  for (let i = 0; i < 5; i++) {
+    const cb = document.getElementById('dc' + i);
+    if (!cb || !cb.checked) { alert('Please tick all five statements.'); return; }
+    confData['dc' + i] = true;
+  }
+  confStep = 2; renderConf();
+}
+
+function renderConf2() {
+  const qs = getQuiz(confData.policy);
+  return `<div class="conf-card">
+    <div class="conf-card-head"><span class="conf-card-title">Quick understanding check</span><span class="pill pill-amber">${qs.length} questions</span></div>
+    <div class="conf-card-body">
+      <p style="font-size:11px;color:var(--ink2);margin-bottom:12px;line-height:1.6">Not a test — confirms your understanding of the key points.</p>
+      ${qs.map((q,qi)=>`<div class="quiz-block">
+        <div class="quiz-q">${qi+1}. ${q.q}</div>
+        ${q.opts.map((o,oi)=>`<div class="qopt${confAnswers[qi]===oi?' sel':''}" id="qo_${qi}_${oi}" onclick="selQ(${qi},${oi})">
+          <input type="radio" name="q${qi}" ${confAnswers[qi]===oi?'checked':''} style="accent-color:var(--green);flex-shrink:0;margin-top:2px">
+          <span>${o}</span>
+        </div>`).join('')}
+      </div>`).join('')}
+      <div class="btn-row-c">
+        <button class="cbtn" onclick="confStep=1;renderConf()">Back</button>
+        <button class="cbtn cbtn-green" id="subBtn" onclick="submitConf()">Submit confirmation</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function selQ(qi, oi) {
+  confAnswers[qi] = oi;
+  const qs = getQuiz(confData.policy);
+  qs[qi].opts.forEach((_, i) => {
+    const el = document.getElementById(`qo_${qi}_${i}`);
+    if (el) { el.classList.toggle('sel', i === oi); el.querySelector('input').checked = (i === oi); }
+  });
+}
+
+async function submitConf() {
+  const qs = getQuiz(confData.policy);
+  if (Object.keys(confAnswers).length < qs.length) { alert('Please answer all questions.'); return; }
+  const correct = qs.filter((q,i) => confAnswers[i] === q.cor).length;
+  const passed = correct >= Math.ceil(qs.length * 0.67);
+  const score = Math.round(correct / qs.length * 100);
+  const btn = document.getElementById('subBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<div class="spinner-c"></div> Saving...'; }
+  const saved = await saveToSP({ StaffName: confData.name, Role: confData.role, PolicyName: confData.policy, QuizScore: score, Passed: passed, DeclarationSigned: true });
+  confData._passed = passed; confData._score = score;
+  confData._correct = correct; confData._total = qs.length;
+  confData._saved = saved;
+  confStep = 3; renderConf();
+}
+
+function renderConf3() {
+  const {_passed:passed,_score:score,_correct:correct,_total:total,_saved:saved} = confData;
+  return `<div class="conf-card">
+    <div class="conf-card-head"><span class="conf-card-title">Confirmation ${passed?'complete':'needs review'}</span></div>
+    <div class="conf-card-body">
+      <div class="conf-banner ${passed?'cb-green':'cb-red'}" style="margin-bottom:10px">
+        <div class="cb-title" style="color:${passed?'var(--gt)':'var(--rt)'}">${passed?'Well done, '+confData.name+'!':'Additional review needed, '+confData.name}</div>
+        <div class="cb-body" style="color:${passed?'var(--gt)':'var(--rt)'}">
+          ${passed?`Confirmation for <strong>${confData.policy}</strong> recorded. Score: ${correct}/${total} (${score}%).`:`Score: ${correct}/${total} (${score}%). Please re-read the policy and try again.`}
+        </div>
+      </div>
+      <div class="conf-banner ${saved?'cb-green':'cb-amber'}">
+        <div class="cb-title" style="color:${saved?'var(--gt)':'var(--at)'}">${saved?'Saved to SharePoint':'Not saved automatically'}</div>
+        <div class="cb-body" style="color:${saved?'var(--gt)':'var(--at)'}">
+          ${saved?'Your confirmation is in the PolicyConfirmations list and will show in the manager dashboard.':'Could not save automatically. Please let your manager know you have completed this confirmation.'}
+        </div>
+      </div>
+      <div class="rec-box">
+        <strong style="color:var(--ink)">Confirmation record</strong><br>
+        Name: ${confData.name} · Role: ${confData.role}<br>
+        Policy: ${confData.policy}<br>
+        Date: ${new Date().toLocaleDateString('en-GB')} · Time: ${new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}<br>
+        Score: ${score}% · Result: <strong>${passed?'PASSED':'NEEDS REVIEW'}</strong>
+      </div>
+      <div class="btn-row-c" style="margin-top:12px">
+        <button class="cbtn" onclick="confStep=0;confData={};confAnswers={};renderConf()">Confirm another policy</button>
+        ${!passed?`<button class="cbtn cbtn-green" onclick="confStep=0;confAnswers={};renderConf()">Try again</button>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── SharePoint API ────────────────────────────────────────────
+async function saveToSP(data) {
+  try {
+    const dr = await fetch(`${SP_URL}/_api/contextinfo`, { method:'POST', headers:{'Accept':'application/json;odata=verbose'}, credentials:'include' });
+    if (!dr.ok) throw new Error('digest failed');
+    const dj = await dr.json();
+    const digest = dj.d.GetContextWebInformation.FormDigestValue;
+    const res = await fetch(`${SP_URL}/_api/web/lists/getbytitle('${LIST}')/items`, {
+      method:'POST',
+      headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','X-RequestDigest':digest},
+      credentials:'include',
+      body: JSON.stringify({'__metadata':{'type':`SP.Data.${LIST}ListItem`},'Title':data.StaffName,'StaffName':data.StaffName,'Role':data.Role,'PolicyName':data.PolicyName,'QuizScore':data.QuizScore,'Passed':data.Passed,'DeclarationSigned':data.DeclarationSigned})
+    });
+    return res.ok;
+  } catch(e) { console.error('SP save failed:', e); return false; }
+}
+
+// ── Dashboard ─────────────────────────────────────────────────
+let allData = [];
+
+async function loadDashboard() {
+  const url = `${SP_URL}/_api/web/lists/getbytitle('${LIST}')/items?$select=StaffName,Role,PolicyName,QuizScore,Passed,DeclarationSigned,Created&$orderby=Created desc&$top=500`;
+  try {
+    const res = await fetch(url, { headers:{'Accept':'application/json;odata=verbose'}, credentials:'include' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    allData = json.d.results;
+    setSpStatus(true);
+  } catch(e) {
+    console.error('Dashboard load failed:', e);
+    allData = getSampleData();
+    setSpStatus(false);
+  }
+  renderDashboard();
+}
+
+function setSpStatus(ok) {
+  document.getElementById('spDot').style.background = ok ? '#1D9E75' : '#EF9F27';
+  document.getElementById('spLabel').textContent = ok ? 'SharePoint connected' : 'Using sample data';
+  document.getElementById('spStatus').style.background = ok ? 'var(--gl)' : 'var(--al)';
+  document.getElementById('spLabel').style.color = ok ? 'var(--gt)' : 'var(--at)';
+  document.getElementById('dashRefresh').textContent = 'Last updated: ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
+
+function getSampleData() {
+  return [
+    {StaffName:'Sarah Rahman',Role:'Support Worker',PolicyName:'Safeguarding Adults',QuizScore:100,Passed:true,Created:'2026-04-17T09:14:00Z'},
+    {StaffName:'James Okafor',Role:'Support Worker',PolicyName:'Safeguarding Adults',QuizScore:33,Passed:false,Created:'2026-04-17T10:02:00Z'},
+    {StaffName:'Priya Mehta',Role:'Senior Carer',PolicyName:'Medication Administration',QuizScore:100,Passed:true,Created:'2026-04-16T14:22:00Z'},
+    {StaffName:'Lee Owusu',Role:'Support Worker',PolicyName:'Medication Administration',QuizScore:67,Passed:true,Created:'2026-04-16T15:05:00Z'},
+    {StaffName:'Diane Walsh',Role:'Senior Carer',PolicyName:'Safeguarding Adults',QuizScore:100,Passed:true,Created:'2026-04-15T08:30:00Z'},
+    {StaffName:'Marcus Hobbs',Role:'Support Worker',PolicyName:'Lone Working',QuizScore:33,Passed:false,Created:'2026-04-15T09:45:00Z'},
+    {StaffName:'Ayesha Khan',Role:'Care Coordinator',PolicyName:'Medication Administration',QuizScore:100,Passed:true,Created:'2026-04-14T11:00:00Z'},
+    {StaffName:'Tom Barnes',Role:'Support Worker',PolicyName:'Safeguarding Adults',QuizScore:100,Passed:true,Created:'2026-04-14T13:30:00Z'},
+  ];
+}
+
+function renderDashboard() {
+  const total = allData.length;
+  const passed = allData.filter(d => d.Passed).length;
+  const failed = total - passed;
+  const avg = total ? Math.round(allData.reduce((a,d) => a+(d.QuizScore||0),0)/total) : 0;
+  const passRate = total ? Math.round(passed/total*100) : 0;
+  const barCol = v => v>=80?'#1D9E75':v>=60?'#EF9F27':'#E24B4A';
+
+  document.getElementById('dashStats').innerHTML = [
+    {val:total,lbl:'Total confirmations',sub:'across all policies',col:'var(--ink)'},
+    {val:passRate+'%',lbl:'Pass rate',sub:passed+' of '+total+' passed',col:passRate>=80?'#1D9E75':passRate>=60?'#EF9F27':'#E24B4A'},
+    {val:failed,lbl:'Needs review',sub:'scored below 67%',col:failed>0?'var(--red)':'var(--green)'},
+    {val:avg+'%',lbl:'Avg quiz score',sub:'across all submissions',col:barCol(avg)},
+  ].map(s=>`<div class="stat-card"><div class="stat-val" style="color:${s.col}">${s.val}</div><div class="stat-lbl">${s.lbl}</div><div class="stat-sub">${s.sub}</div></div>`).join('');
+
+  const byPolicy = {};
+  allData.forEach(d => {
+    if (!byPolicy[d.PolicyName]) byPolicy[d.PolicyName] = {total:0,passed:0};
+    byPolicy[d.PolicyName].total++;
+    if (d.Passed) byPolicy[d.PolicyName].passed++;
+  });
+  document.getElementById('policyBreakdown').innerHTML = Object.entries(byPolicy).length
+    ? Object.entries(byPolicy).sort((a,b)=>a[1].passed/a[1].total-b[1].passed/b[1].total).map(([p,s])=>{
+        const pct=Math.round(s.passed/s.total*100);const col=barCol(pct);
+        return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:11px;font-weight:500">${p}</span><span style="font-size:10px;color:${col};font-weight:500">${s.passed}/${s.total} · ${pct}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${col}"></div></div></div>`;
+      }).join('')
+    : '<div style="text-align:center;padding:20px;font-size:12px;color:var(--ink3)">No confirmations yet.</div>';
+
+  const review = allData.filter(d=>!d.Passed).slice(0,6);
+  document.getElementById('reviewCount').textContent = review.length + ' pending';
+  document.getElementById('reviewList').innerHTML = review.length
+    ? review.map(d=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--bdr)"><div class="avatar-sm">${d.StaffName.split(' ').map(n=>n[0]).join('').slice(0,2)}</div><div style="flex:1"><div style="font-size:11px;font-weight:500">${d.StaffName}</div><div style="font-size:10px;color:var(--ink2)">${d.PolicyName}</div></div><span class="pill pill-red">${d.QuizScore||0}%</span></div>`).join('')
+    : '<div style="text-align:center;padding:20px;font-size:12px;color:var(--ink3)">No staff need review.</div>';
+
+  document.getElementById('logCount').textContent = total + ' records';
+  document.getElementById('logTable').innerHTML = allData.length
+    ? allData.map(d=>{
+        const date = new Date(d.Created).toLocaleDateString('en-GB');
+        const init = d.StaffName.split(' ').map(n=>n[0]).join('').slice(0,2);
+        return `<tr>
+          <td><div style="display:flex;align-items:center;gap:7px"><div class="avatar-sm">${init}</div><span style="font-weight:500">${d.StaffName}</span></div></td>
+          <td style="color:var(--ink2)">${d.Role}</td>
+          <td>${d.PolicyName}</td>
+          <td style="font-size:10px;font-family:monospace">${date}</td>
+          <td style="font-weight:500;color:${(d.QuizScore||0)>=67?'var(--green)':'var(--red)'}">${d.QuizScore||0}%</td>
+          <td><span class="pill ${d.Passed?'pill-green':'pill-red'}">${d.Passed?'Passed':'Needs review'}</span></td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--ink3);font-size:12px">No confirmations yet.</td></tr>';
+}
+
+function exportCSV() {
+  const rows = [['Name','Role','Policy','Date','Score','Result']];
+  allData.forEach(d => rows.push([d.StaffName,d.Role,d.PolicyName,new Date(d.Created).toLocaleDateString('en-GB'),(d.QuizScore||0)+'%',d.Passed?'PASSED':'NEEDS REVIEW']));
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n'));
+  a.download = 'PolicyHub_Compliance_' + new Date().toLocaleDateString('en-GB').replace(/\//g,'-') + '.csv';
+  a.click();
+}
+
+// ── Init ──────────────────────────────────────────────────────
+renderHomeAreas();
+renderLibrary();
+</script>
+</body>
+</html>
