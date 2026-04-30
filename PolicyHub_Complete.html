@@ -222,6 +222,31 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
 .alert-bar button{background:none;border:none;cursor:pointer;color:var(--at);font-size:18px;line-height:1;padding:0 4px;margin-left:auto}
 .alert-bar-btn{background:var(--amber);color:#fff;border:none;border-radius:5px;padding:4px 10px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;margin-left:8px}
 
+
+/* ═══════════ REGISTER PAGE ═══════════ */
+.reg-container{max-width:1020px;margin:0 auto;padding:24px 28px}
+.reg-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.reg-title{font-size:16px;font-weight:500}
+.reg-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--sur)}
+.reg-table th{text-align:left;padding:8px 10px;font-size:11px;color:var(--ink3);font-weight:500;border-bottom:0.5px solid var(--bdr2);background:var(--sur2);white-space:nowrap}
+.reg-table td{padding:9px 10px;border-bottom:0.5px solid var(--bdr);color:var(--ink);vertical-align:middle}
+.reg-table tr:hover td{background:var(--sur2)}
+.days-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:500;white-space:nowrap}
+.days-ok{background:var(--gl);color:var(--gt)}
+.days-warn{background:var(--al);color:var(--at)}
+.days-due{background:var(--rl);color:var(--rt)}
+.days-over{background:#A32D2D;color:#fff}
+.review-banner{background:var(--rl);border:0.5px solid #F09595;border-radius:var(--r);padding:12px 16px;margin-bottom:14px;display:none}
+.review-banner.show{display:block}
+.review-banner-title{font-size:13px;font-weight:500;color:var(--rt);margin-bottom:6px}
+.review-item{font-size:12px;color:var(--rt);padding:3px 0;border-bottom:0.5px solid #F7C1C1}
+.review-item:last-child{border-bottom:none}
+.reg-filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.reg-fbtn{font-size:11px;padding:4px 12px;border-radius:12px;border:0.5px solid var(--bdr2);background:var(--sur);color:var(--ink2);cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.12s}
+.reg-fbtn.on{background:var(--green);color:#fff;border-color:var(--green)}
+.mark-done-btn{font-size:10px;padding:3px 8px;border-radius:5px;background:var(--green);color:#fff;border:none;cursor:pointer;font-family:"DM Sans",sans-serif}
+.mark-done-btn:hover{opacity:0.85}
+
 @media(max-width:700px){
   .hero-inner{grid-template-columns:1fr}
   .hero-card{display:none}
@@ -244,6 +269,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
     <button class="tnav-item active" id="nav-home" onclick="showPage('home')">Home</button>
     <button class="tnav-item" id="nav-library" onclick="showPage('library')">Policy library</button>
     <button class="tnav-item" id="nav-confirm" onclick="showPage('confirm')">Confirm reading</button>
+    <button class="tnav-item" id="nav-register" onclick="showPage('register')">Policy register</button>
     <button class="tnav-item" id="nav-dashboard" onclick="showPage('dashboard')">Manager</button>
   </div>
   <button class="tnav-pill" onclick="showPage('confirm')">Confirm a policy</button>
@@ -251,9 +277,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
 
 <!-- ═══════════ HOME ═══════════ -->
 <div class="page active" id="page-home">
-  <div id="alertBar" class="alert-bar">
+  <div id="alertBar" class="alert-bar" style="display:none">
     <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#BA7517" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.3" stroke="#BA7517" stroke-width="1.2" stroke-linecap="round"/></svg>
-    <strong>2 policies updated</strong>&nbsp;— Medication Administration v3.1 and Safeguarding Adults v2.4 need your confirmation by Friday 18 April.
+    <span id="alertText"></span>
     <button class="alert-bar-btn" onclick="showPage('confirm')">Confirm now</button>
     <button onclick="document.getElementById('alertBar').style.display='none'">×</button>
   </div>
@@ -271,9 +297,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
       <div class="hero-card">
         <div class="hc-label">Organisation overview</div>
         <div class="hc-stats">
-          <div class="hc-stat"><div class="hc-val">34</div><div class="hc-slabel">Policies</div></div>
-          <div class="hc-stat"><div class="hc-val">91%</div><div class="hc-slabel">Read rate</div></div>
-          <div class="hc-stat"><div class="hc-val">2</div><div class="hc-slabel">Need action</div></div>
+          <div class="hc-stat"><div class="hc-val" id="statPolicies">34</div><div class="hc-slabel">Policies</div></div>
+          <div class="hc-stat"><div class="hc-val" id="statReadRate">91%</div><div class="hc-slabel">Read rate</div></div>
+          <div class="hc-stat"><div class="hc-val" id="statNeedAction">2</div><div class="hc-slabel">Need action</div></div>
         </div>
         <div class="hc-updates">
           <div class="hc-label" style="margin-top:12px">Recent updates</div>
@@ -307,15 +333,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
         <div class="card-body" style="padding:8px">
           <div class="ql" onclick="showPage('confirm')"><div class="ql-icon" style="background:var(--gl)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3 3 6-6" stroke="#085041" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="ql-text">Confirm a policy</div><div class="ql-sub">Log your read confirmation</div></div><span class="ql-arr">›</span></div>
           <div class="ql" onclick="showPage('library')"><div class="ql-icon" style="background:var(--bl)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="2" width="9" height="9" rx="1.5" stroke="#0C447C" stroke-width="1.2"/><path d="M4 5h5M4 7h3" stroke="#0C447C" stroke-width="1.2" stroke-linecap="round"/></svg></div><div><div class="ql-text">Browse policies</div><div class="ql-sub">All 34 policies</div></div><span class="ql-arr">›</span></div>
+          <div class="ql" onclick="showPage('register')"><div class="ql-icon" style="background:#EDF8F3"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="#085041" stroke-width="1.2"/><path d="M3.5 4.5h6M3.5 6.5h6M3.5 8.5h3" stroke="#085041" stroke-width="1.2" stroke-linecap="round"/></svg></div><div><div class="ql-text">Policy register</div><div class="ql-sub">Review dates &amp; status</div></div><span class="ql-arr">›</span></div>
           <div class="ql" onclick="showPage('dashboard')"><div class="ql-icon" style="background:var(--sur2)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="4.5" height="4.5" rx="1" stroke="#5A5A56" stroke-width="1.2"/><rect x="7.5" y="1" width="4.5" height="4.5" rx="1" stroke="#5A5A56" stroke-width="1.2"/><rect x="1" y="7.5" width="4.5" height="4.5" rx="1" stroke="#5A5A56" stroke-width="1.2"/><rect x="7.5" y="7.5" width="4.5" height="4.5" rx="1" stroke="#5A5A56" stroke-width="1.2"/></svg></div><div><div class="ql-text">Manager dashboard</div><div class="ql-sub">Compliance overview</div></div><span class="ql-arr">›</span></div>
         </div>
       </div>
       <div class="card">
         <div class="card-head"><span class="card-title">Key contacts</span></div>
         <div class="card-body" style="font-size:12px">
-          <div class="contact-item"><div class="contact-label">Safeguarding lead</div><div class="contact-val">Registered Manager</div><div class="contact-tel">02034112330</div></div>
-          <div class="contact-item"><div class="contact-label">MCA lead</div><div class="contact-val">Janine Davis</div></div>
-          <div class="contact-item"><div class="contact-label">Brent Safeguarding</div><div class="contact-tel">02089374300</div></div>
+          <div class="contact-item"><div class="contact-label">Safeguarding lead</div><div class="contact-val" id="cSafeLead"></div><div class="contact-tel" id="cSafeTel"></div></div>
+          <div class="contact-item"><div class="contact-label">MCA lead</div><div class="contact-val" id="cMcaLead"></div></div>
+          <div class="contact-item"><div class="contact-label" id="cLocalLabel"></div><div class="contact-tel" id="cLocalTel"></div></div>
           <div style="padding-top:10px;border-top:0.5px solid var(--bdr)"><div class="contact-label" style="color:var(--red)">Emergency</div><div style="font-size:18px;font-weight:500;color:var(--red)">999</div><div class="contact-val">NHS non-emergency: 111</div><div class="contact-val">CQC: 03000 616161</div></div>
         </div>
       </div>
@@ -345,6 +372,51 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
     <button class="snav-btn" onclick="scrollArea('governance',this)">Governance</button>
   </div>
   <div class="lib-container" id="libContainer"></div>
+</div>
+
+<!-- ═══════════ POLICY REGISTER ═══════════ -->
+<div class="page" id="page-register">
+  <div class="reg-container">
+    <div class="reg-head">
+      <div>
+        <div class="reg-title">Policy register</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:2px" id="regLastChecked">Checking review dates...</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="dbtn" onclick="exportRegisterCSV()">Export CSV</button>
+        <button class="dbtn dbtn-green" onclick="showPage('dashboard')">View compliance dashboard</button>
+      </div>
+    </div>
+    <div class="review-banner" id="reviewBanner">
+      <div class="review-banner-title" id="reviewBannerTitle"></div>
+      <div id="reviewBannerItems"></div>
+    </div>
+    <div class="reg-filter-row">
+      <button class="reg-fbtn on" onclick="filterReg('all',this)">All policies</button>
+      <button class="reg-fbtn" onclick="filterReg('overdue',this)">Overdue</button>
+      <button class="reg-fbtn" onclick="filterReg('due30',this)">Due within 30 days</button>
+      <button class="reg-fbtn" onclick="filterReg('current',this)">Current</button>
+    </div>
+    <div style="background:var(--sur);border:0.5px solid var(--bdr2);border-radius:var(--r);overflow:hidden;overflow-x:auto">
+      <table class="reg-table">
+        <thead><tr>
+          <th>Policy</th>
+          <th>Area</th>
+          <th>Version</th>
+          <th>Last reviewed</th>
+          <th>Next review due</th>
+          <th>Days remaining</th>
+          <th>Owner</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr></thead>
+        <tbody id="regTableBody"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--ink3);line-height:1.7">
+      <strong style="color:var(--ink2)">How to update a review date:</strong> When you complete a policy review, click <strong style="color:var(--ink2)">Mark reviewed</strong> next to the policy. This updates the last reviewed date to today and sets the next review date 12 months ahead. The change saves to your browser and persists until you clear your browser data. For a permanent record, export the register to CSV after each review.
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════ CONFIRMATION ═══════════ -->
@@ -396,8 +468,65 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
 </div>
 
 <script>
-const SP_URL = "https://abilitiesdevelopment.sharepoint.com/sites/AbilitiesPolicies";
-const LIST = "PolicyConfirmations";
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ABILITIES POLICY HUB — EASY EDIT SETTINGS                  ║
+// ║  This is the ONLY section you need to edit.                  ║
+// ║  Change values here, save, re-upload to GitHub. Done.        ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+const CONFIG = {
+  // Organisation
+  orgName:             "Abilities Development Ltd",
+  orgAddress:          "340 Preston Road, Wembley, Harrow, HA3 0QH",
+
+  // Key contacts — update when staff change
+  safeguardingLead:    "Registered Manager",
+  safeguardingTel:     "02034112330",
+  mcaLead:             "Janine Davis",
+  localSafeguarding:   "Brent Safeguarding Team",
+  localSafeguardingTel:"02089374300",
+  escalationContact:   "Karen May",
+
+  // Alert bar — set alertActive to false to hide it
+  alertActive:         true,
+  alertMessage:        "2 policies updated — Medication Administration v3.1 and Safeguarding Adults v2.4 need your confirmation by Friday 18 April.",
+
+  // Teams webhook — paste your incoming webhook URL here for review alerts
+  teamsWebhookUrl:      "",
+
+  // SharePoint
+  sharepointUrl:       "https://abilitiesdevelopment.sharepoint.com/sites/AbilitiesPolicies",
+  sharepointList:      "PolicyConfirmations",
+
+  // Dashboard stats — update when read rates change
+  totalPolicies:       34,
+  readRate:            "91%",
+  needAction:          2,
+
+  // ── Policy document links ─────────────────────────────────────
+  // Add SharePoint links here as you upload each policy document.
+  // Key must match the policy name exactly as shown in the library.
+  policyLinks: {
+    "Safeguarding Adults":        "https://abilitiesdevelopment.sharepoint.com/:w:/s/AbilitiesPolicies/IQAobl8YhX4qQ5r-zCZr1S8aAf2Z-7Phvp1Vs0J9FPj6Dyw?e=Xd7Ib2",
+    "Medication Administration":  "https://abilitiesdevelopment.sharepoint.com/:w:/s/AbilitiesPolicies/IQCNDi7FX6NeQbETWoc35sdfARyeFM1C-2ZZEPRHdgkxCJc?e=BJdU3O",
+    "Mental Capacity Act":        "https://abilitiesdevelopment.sharepoint.com/:w:/s/AbilitiesPolicies/IQCPseyUaM2MRYTPW67KEaxFAbEKkgVhDIe5ut1DhiGHbzk?e=3ixNUn",
+    "Mental Capacity Act / DoLS":  "https://abilitiesdevelopment.sharepoint.com/:w:/s/AbilitiesPolicies/IQCPseyUaM2MRYTPW67KEaxFAbEKkgVhDIe5ut1DhiGHbzk?e=3ixNUn",
+    "Mental Capacity & DoLS":      "https://abilitiesdevelopment.sharepoint.com/:w:/s/AbilitiesPolicies/IQCPseyUaM2MRYTPW67KEaxFAbEKkgVhDIe5ut1DhiGHbzk?e=3ixNUn",
+    // Add more below as you upload them to SharePoint:
+    // "Lone Working":            "https://abilitiesdevelopment.sharepoint.com/...",
+    // "Infection Control":       "https://abilitiesdevelopment.sharepoint.com/...",
+    // "Complaints Procedure":    "https://abilitiesdevelopment.sharepoint.com/...",
+    // "Data Protection":         "https://abilitiesdevelopment.sharepoint.com/...",
+    // "Whistleblowing":          "https://abilitiesdevelopment.sharepoint.com/...",
+    // "Moving & Handling":       "https://abilitiesdevelopment.sharepoint.com/...",
+    // "Pressure Ulcer Prevention":"https://abilitiesdevelopment.sharepoint.com/...",
+    // "Recruitment & DBS":       "https://abilitiesdevelopment.sharepoint.com/...",
+    // "Lone Working":            "https://abilitiesdevelopment.sharepoint.com/...",
+  },
+};
+
+const SP_URL = CONFIG.sharepointUrl;
+const LIST   = CONFIG.sharepointList;
 
 const AREAS = [
   {id:'safeguarding',name:'Safeguarding',desc:'Adults at risk, abuse types, reporting, pressure ulcers',color:'#FAEAEA',icon:'#8B2A2A',count:7,rate:88,status:'updated',
@@ -456,6 +585,256 @@ const AREAS = [
 
 const POLICIES_LIST = ['Safeguarding Adults','Medication Administration','Mental Capacity Act / DoLS','Lone Working','Infection Control','Complaints Procedure','Data Protection','Whistleblowing','Moving & Handling','Pressure Ulcer Prevention'];
 
+// ── Policy Register ────────────────────────────────────────────
+// reviewInterval: months between reviews (12 = annual)
+// lastReviewed: date of last review (YYYY-MM-DD)
+// owner: person responsible for the review
+// priority: "high" (safeguarding/medication/MCA) or "standard"
+const POLICY_REGISTER = [
+  // SAFEGUARDING
+  {name:"Safeguarding Adults",          area:"Safeguarding",      ver:"v2.4", lastReviewed:"2025-07-29", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Safeguarding Children",        area:"Safeguarding",      ver:"v1.3", lastReviewed:"2025-04-10", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Whistleblowing",               area:"Safeguarding",      ver:"v1.6", lastReviewed:"2025-02-15", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Prevent & Radicalisation",     area:"Safeguarding",      ver:"v1.2", lastReviewed:"2025-02-01", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Pressure Ulcer Prevention",    area:"Safeguarding",      ver:"v2.1", lastReviewed:"2025-01-20", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Domestic Abuse",               area:"Safeguarding",      ver:"v1.1", lastReviewed:"2025-01-10", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Modern Slavery",               area:"Safeguarding",      ver:"v1.0", lastReviewed:"2025-01-05", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  // MEDICATION
+  {name:"Medication Administration",    area:"Medication",        ver:"v3.1", lastReviewed:"2025-06-19", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Controlled Drugs Procedure",   area:"Medication",        ver:"v2.0", lastReviewed:"2025-03-01", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Covert Medication",            area:"Medication",        ver:"v1.2", lastReviewed:"2025-01-15", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Medication Errors",            area:"Medication",        ver:"v1.5", lastReviewed:"2025-01-10", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Homely Remedies",              area:"Medication",        ver:"v1.0", lastReviewed:"2024-12-05", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  // MENTAL CAPACITY
+  {name:"Mental Capacity Act",          area:"MCA & DoLS",        ver:"v1.8", lastReviewed:"2025-06-19", reviewInterval:12, owner:"Janine Davis",        priority:"high"},
+  {name:"Deprivation of Liberty",       area:"MCA & DoLS",        ver:"v2.0", lastReviewed:"2025-04-01", reviewInterval:12, owner:"Janine Davis",        priority:"high"},
+  {name:"Lasting Power of Attorney",    area:"MCA & DoLS",        ver:"v1.1", lastReviewed:"2025-02-15", reviewInterval:12, owner:"Janine Davis",        priority:"standard"},
+  {name:"Advance Decisions",            area:"MCA & DoLS",        ver:"v1.0", lastReviewed:"2025-02-01", reviewInterval:12, owner:"Janine Davis",        priority:"standard"},
+  // HR
+  {name:"Recruitment & DBS",            area:"HR & Staffing",     ver:"v2.1", lastReviewed:"2025-03-15", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Induction",                    area:"HR & Staffing",     ver:"v1.4", lastReviewed:"2025-03-01", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Supervision & Appraisal",      area:"HR & Staffing",     ver:"v2.0", lastReviewed:"2025-02-15", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Disciplinary & Grievance",     area:"HR & Staffing",     ver:"v1.3", lastReviewed:"2025-02-10", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Lone Working",                 area:"HR & Staffing",     ver:"v1.5", lastReviewed:"2025-04-02", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Equality & Diversity",         area:"HR & Staffing",     ver:"v1.2", lastReviewed:"2025-01-01", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  // HEALTH & SAFETY
+  {name:"Infection Prevention & Control",area:"Health & Safety",  ver:"v2.2", lastReviewed:"2025-03-28", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Moving & Handling",            area:"Health & Safety",   ver:"v2.3", lastReviewed:"2025-02-22", reviewInterval:12, owner:"Registered Manager",  priority:"high"},
+  {name:"Fire Safety",                  area:"Health & Safety",   ver:"v1.2", lastReviewed:"2025-02-10", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"COSHH",                        area:"Health & Safety",   ver:"v1.1", lastReviewed:"2025-02-01", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Accident & Incident Reporting",area:"Health & Safety",   ver:"v1.4", lastReviewed:"2025-01-15", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  // GOVERNANCE
+  {name:"Data Protection & GDPR",       area:"Governance",        ver:"v3.0", lastReviewed:"2025-03-01", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Complaints Procedure",         area:"Governance",        ver:"v1.3", lastReviewed:"2025-03-20", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Duty of Candour",              area:"Governance",        ver:"v1.2", lastReviewed:"2025-02-15", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"CQC Notifications",            area:"Governance",        ver:"v1.1", lastReviewed:"2025-02-10", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Quality Assurance & Audit",    area:"Governance",        ver:"v1.3", lastReviewed:"2025-02-01", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Business Continuity",          area:"Governance",        ver:"v1.0", lastReviewed:"2025-01-15", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+  {name:"Records Management",           area:"Governance",        ver:"v1.2", lastReviewed:"2025-01-05", reviewInterval:12, owner:"Registered Manager",  priority:"standard"},
+];
+
+// Load any saved review dates from localStorage
+function loadSavedReviews() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('policyReviews') || '{}');
+    POLICY_REGISTER.forEach(p => {
+      const key = p.name.replace(/\s+/g,'_');
+      if (saved[key]) {
+        p.lastReviewed = saved[key].lastReviewed;
+        p.ver = saved[key].ver || p.ver;
+        p.notes = saved[key].notes || '';
+      }
+    });
+  } catch(e) {}
+}
+
+function saveReview(policyName, newDate, newVer, notes) {
+  try {
+    const saved = JSON.parse(localStorage.getItem('policyReviews') || '{}');
+    const key = policyName.replace(/\s+/g,'_');
+    saved[key] = { lastReviewed: newDate, ver: newVer, notes: notes || '' };
+    localStorage.setItem('policyReviews', JSON.stringify(saved));
+  } catch(e) {}
+}
+
+function getNextReviewDate(lastReviewed, intervalMonths) {
+  const d = new Date(lastReviewed);
+  d.setMonth(d.getMonth() + intervalMonths);
+  return d;
+}
+
+function getDaysUntilReview(nextReviewDate) {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const next = new Date(nextReviewDate);
+  next.setHours(0,0,0,0);
+  return Math.round((next - today) / (1000 * 60 * 60 * 24));
+}
+
+function getReviewStatus(days) {
+  if (days < 0)  return { cls:'days-over', label: Math.abs(days)+'d overdue', level:'overdue' };
+  if (days <= 30) return { cls:'days-due',  label: days+'d remaining',         level:'due30' };
+  if (days <= 90) return { cls:'days-warn', label: days+'d remaining',         level:'warn' };
+  return { cls:'days-ok', label: days+'d remaining', level:'current' };
+}
+
+let regFilter = 'all';
+
+function filterReg(f, btn) {
+  regFilter = f;
+  document.querySelectorAll('.reg-fbtn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderRegister();
+}
+
+function renderRegister() {
+  loadSavedReviews();
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const policies = POLICY_REGISTER.map(p => {
+    const nextDate = getNextReviewDate(p.lastReviewed, p.reviewInterval);
+    const days = getDaysUntilReview(nextDate);
+    const status = getReviewStatus(days);
+    return {...p, nextDate, days, status};
+  });
+
+  // Filter
+  const filtered = policies.filter(p => {
+    if (regFilter === 'overdue') return p.days < 0;
+    if (regFilter === 'due30')   return p.days >= 0 && p.days <= 30;
+    if (regFilter === 'current') return p.days > 30;
+    return true;
+  });
+
+  // Review banner
+  const overdue = policies.filter(p => p.days < 0);
+  const due30   = policies.filter(p => p.days >= 0 && p.days <= 30);
+  const banner  = document.getElementById('reviewBanner');
+  const bannerTitle = document.getElementById('reviewBannerTitle');
+  const bannerItems = document.getElementById('reviewBannerItems');
+
+  if (overdue.length || due30.length) {
+    banner.classList.add('show');
+    bannerTitle.textContent = `${overdue.length} policies overdue · ${due30.length} due within 30 days — action required`;
+    bannerItems.innerHTML = [...overdue, ...due30].slice(0,5).map(p =>
+      `<div class="review-item">${p.name} — ${p.status.label} — Owner: ${p.owner}</div>`
+    ).join('') + (overdue.length + due30.length > 5 ? `<div class="review-item">...and ${overdue.length + due30.length - 5} more</div>` : '');
+  } else {
+    banner.classList.remove('show');
+  }
+
+  // Update last checked
+  document.getElementById('regLastChecked').textContent =
+    `Last checked: ${today.toLocaleDateString('en-GB')} · ${overdue.length} overdue · ${due30.length} due within 30 days`;
+
+  // Render table
+  document.getElementById('regTableBody').innerHTML = filtered.length
+    ? filtered.map(p => `
+      <tr>
+        <td><strong>${p.name}</strong>${p.notes ? `<div style="font-size:10px;color:var(--ink3);margin-top:2px">${p.notes}</div>` : ''}</td>
+        <td><span class="pill pill-gray">${p.area}</span></td>
+        <td style="font-size:11px;font-family:monospace">${p.ver}</td>
+        <td style="font-size:11px;color:var(--ink2)">${new Date(p.lastReviewed).toLocaleDateString('en-GB')}</td>
+        <td style="font-size:11px;color:var(--ink2)">${p.nextDate.toLocaleDateString('en-GB')}</td>
+        <td><span class="days-badge ${p.status.cls}">${p.status.label}</span></td>
+        <td style="font-size:11px;color:var(--ink2)">${p.owner}</td>
+        <td><span class="pill ${p.days < 0 ? 'pill-red' : p.days <= 30 ? 'pill-amber' : 'pill-green'}">${p.days < 0 ? 'Overdue' : p.days <= 30 ? 'Due soon' : 'Current'}</span></td>
+        <td><button class="mark-done-btn" onclick="markReviewed('${p.name.replace(/'/g,"\'")}')">Mark reviewed</button></td>
+      </tr>`).join('')
+    : `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--ink3);font-size:13px">No policies match this filter.</td></tr>`;
+}
+
+function markReviewed(policyName) {
+  const today = new Date().toISOString().split('T')[0];
+  const p = POLICY_REGISTER.find(x => x.name === policyName);
+  if (!p) return;
+
+  // Increment version minor number
+  const verParts = p.ver.replace('v','').split('.');
+  const newVer = 'v' + verParts[0] + '.' + (parseInt(verParts[1] || 0) + 1);
+  const notes = prompt(`Add a review note for "${policyName}" (optional):`) || '';
+
+  p.lastReviewed = today;
+  p.ver = newVer;
+  p.notes = notes;
+  saveReview(policyName, today, newVer, notes);
+
+  // Send Teams alert if webhook configured
+  if (CONFIG.teamsWebhookUrl) {
+    sendTeamsReviewAlert(policyName, today, newVer, p.owner);
+  }
+
+  renderRegister();
+  alert(`✓ ${policyName} marked as reviewed. Next review due: ${getNextReviewDate(today, p.reviewInterval).toLocaleDateString('en-GB')}`);
+}
+
+async function sendTeamsReviewAlert(policyName, date, ver, owner) {
+  try {
+    await fetch(CONFIG.teamsWebhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'message',
+        attachments: [{
+          contentType: 'application/vnd.microsoft.card.adaptive',
+          content: {
+            $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
+            type: 'AdaptiveCard', version: '1.4',
+            body: [
+              { type: 'TextBlock', text: 'Policy review completed', weight: 'Bolder', color: 'good' },
+              { type: 'FactSet', facts: [
+                { title: 'Policy:', value: policyName },
+                { title: 'New version:', value: ver },
+                { title: 'Reviewed:', value: new Date(date).toLocaleDateString('en-GB') },
+                { title: 'Owner:', value: owner },
+                { title: 'Next review:', value: getNextReviewDate(date, 12).toLocaleDateString('en-GB') },
+              ]},
+              { type: 'TextBlock', text: 'Staff will need to confirm reading of the updated policy.', wrap: true, isSubtle: true },
+            ],
+          }
+        }]
+      })
+    });
+  } catch(e) { console.warn('Teams alert failed', e); }
+}
+
+function checkUpcomingReviews() {
+  loadSavedReviews();
+  const overdue = POLICY_REGISTER.filter(p => getDaysUntilReview(getNextReviewDate(p.lastReviewed, p.reviewInterval)) < 0);
+  const due30   = POLICY_REGISTER.filter(p => {
+    const d = getDaysUntilReview(getNextReviewDate(p.lastReviewed, p.reviewInterval));
+    return d >= 0 && d <= 30;
+  });
+
+  // Show alert on home page if reviews are due
+  const homeAlert = document.getElementById('alertBar');
+  const alertText = document.getElementById('alertText');
+  if ((overdue.length || due30.length) && homeAlert && alertText) {
+    const msg = overdue.length
+      ? `${overdue.length} ${overdue.length === 1 ? 'policy is' : 'policies are'} overdue for review — ${overdue.map(p=>p.name).slice(0,2).join(', ')}${overdue.length > 2 ? ' and more' : ''}. Action required.`
+      : `${due30.length} ${due30.length === 1 ? 'policy' : 'policies'} due for review within 30 days.`;
+    alertText.innerHTML = `<strong>Policy review alert</strong> — ${msg}`;
+    homeAlert.style.display = 'flex';
+  }
+}
+
+function exportRegisterCSV() {
+  loadSavedReviews();
+  const rows = [['Policy','Area','Version','Last Reviewed','Next Review Due','Days Remaining','Owner','Priority','Status']];
+  POLICY_REGISTER.forEach(p => {
+    const nextDate = getNextReviewDate(p.lastReviewed, p.reviewInterval);
+    const days = getDaysUntilReview(nextDate);
+    const status = days < 0 ? 'OVERDUE' : days <= 30 ? 'DUE SOON' : 'CURRENT';
+    rows.push([p.name, p.area, p.ver, p.lastReviewed, nextDate.toLocaleDateString('en-GB'), days, p.owner, p.priority.toUpperCase(), status]);
+  });
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n'));
+  a.download = 'PolicyRegister_' + new Date().toLocaleDateString('en-GB').replace(/\//g,'-') + '.csv';
+  a.click();
+}
+
+
 const QUIZ = {
   'Safeguarding Adults':[
     {q:'If a service user asks you to promise not to tell anyone about abuse, what do you do?',opts:['Promise secrecy so they feel safe','Explain you have a duty to report and will support them','Tell their family','Wait to see if it happens again'],cor:1},
@@ -479,6 +858,16 @@ const QUIZ = {
   ],
 };
 
+// ── Open policy document or go to confirm ────────────────────
+function openPolicy(name) {
+  const link = CONFIG.policyLinks && CONFIG.policyLinks[name];
+  if (link) {
+    window.open(link, '_blank');
+  } else {
+    showPage('confirm');
+  }
+}
+
 // ── Navigation ────────────────────────────────────────────────
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -488,6 +877,7 @@ function showPage(id) {
   if (nb) nb.classList.add('active');
   window.scrollTo(0, 0);
   if (id === 'library') renderLibrary();
+  if (id === 'register') renderRegister();
   if (id === 'confirm') { confStep = 0; confData = {}; confAnswers = {}; renderConf(); }
   if (id === 'dashboard') loadDashboard();
 }
@@ -532,11 +922,11 @@ function renderLibrary(filter = '') {
         <div><div class="area-hdr-title">${a.name}</div><div class="area-hdr-meta">${a.policies.length} policies</div></div>
       </div>
       <div class="policy-grid">${filtered.map(p => `
-        <div class="policy-card" onclick="showPage('confirm')">
+        <div class="policy-card" onclick="openPolicy('${p.name}')">
           <div class="pc-top"><span class="pc-name">${p.name}</span><span class="pc-ver">${p.ver}</span></div>
           <div class="pc-desc">${p.desc}</div>
-          <div style="display:flex;gap:5px;flex-wrap:wrap">${colMap[p.status]}</div>
-          <div class="pc-footer"><span class="pc-action">Read &amp; confirm →</span><span class="pc-date">Updated ${p.updated}</span></div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">${colMap[p.status]}${CONFIG.policyLinks && CONFIG.policyLinks[p.name] ? '<span class="pill pill-green" style="margin-left:auto">Document ready</span>' : '<span class="pill pill-gray" style="margin-left:auto">Coming soon</span>'}</div>
+          <div class="pc-footer"><span class="pc-action">${CONFIG.policyLinks && CONFIG.policyLinks[p.name] ? 'Read document →' : 'Confirm reading →'}</span><span class="pc-date">Updated ${p.updated}</span></div>
         </div>`).join('')}
       </div>
     </div>`;
@@ -827,6 +1217,29 @@ function exportCSV() {
 }
 
 // ── Init ──────────────────────────────────────────────────────
+// ── Apply config to DOM ───────────────────────────────────────
+function applyConfig() {
+  // Alert bar
+  const ab = document.getElementById('alertBar');
+  if (CONFIG.alertActive) {
+    document.getElementById('alertText').innerHTML = CONFIG.alertMessage;
+    ab.style.display = 'flex';
+  }
+  // Stats
+  document.getElementById('statPolicies').textContent   = CONFIG.totalPolicies;
+  document.getElementById('statReadRate').textContent   = CONFIG.readRate;
+  document.getElementById('statNeedAction').textContent = CONFIG.needAction;
+  // Contacts
+  document.getElementById('cSafeLead').textContent  = CONFIG.safeguardingLead;
+  document.getElementById('cSafeTel').textContent   = CONFIG.safeguardingTel;
+  document.getElementById('cMcaLead').textContent   = CONFIG.mcaLead;
+  document.getElementById('cLocalLabel').textContent = CONFIG.localSafeguarding;
+  document.getElementById('cLocalTel').textContent  = CONFIG.localSafeguardingTel;
+}
+
+applyConfig();
+loadSavedReviews();
+checkUpcomingReviews();
 renderHomeAreas();
 renderLibrary();
 </script>
